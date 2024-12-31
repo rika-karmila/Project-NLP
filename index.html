@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Spam Chat Email </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        textarea {
+            width: 50%;
+            height: 100px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        h1 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Spam  Chat Email</h1>
+    <form id="emailForm">
+        <textarea name="email" id="email" placeholder="Enter your email text here..."></textarea>
+        <br><br>
+        <button type="submit">Check</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        // Menangani pengiriman formulir menggunakan Fetch API
+        document.getElementById('emailForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            var emailText = document.getElementById('email').value;
+            
+            // Kirim permintaan POST ke backend menggunakan Fetch API
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: emailText })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Menampilkan hasil prediksi
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = `<h2>Result: ${data.prediction}</h2>`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = '<h2>Error processing the email.</h2>';
+            });
+        });
+    </script>
+</body>
+</html>
